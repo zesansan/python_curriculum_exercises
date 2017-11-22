@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>math!</title>
+</head>
+<body>
+	<nav>
+		<a href="{{ url_for('index') }}">home</a>
+		<a href="{{ url_for('add') }}">add</a>
+		<a href="{{ url_for('subtract') }}">subract</a>
+		<a href="{{ url_for('multiply') }}">multiply</a>
+		<a href="{{ url_for('divide') }}">divide</a>
+	</nav>
+{% block content %}
+{% endblock %}
+</body>
+</html>

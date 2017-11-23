@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>multiplication</h1>
+<form action="{{ url_for('multiply') }}" method="POST">
+	<input type="numbers" name="mult_num1">
+	<input type="numbers" name= "mult_num2">
+	<input type="submit" value="multiply">
+</form>
+<p>Result: {{ mult_result }}</p>
+<h2>enter two numbers</h2>
+{% endblock %}

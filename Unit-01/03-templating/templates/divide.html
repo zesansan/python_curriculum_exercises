@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>division</h1>
+<form action="{{ url_for('divide') }}" method="POST">
+	<input type="numbers" name="divide_num1">
+	<input type="numbers" name= "divide_num2">
+	<input type="submit" value="divide">
+</form>
+<p>Result: {{ divide_result }}</p>
+<h2>enter two numbers</h2>
+{% endblock %}

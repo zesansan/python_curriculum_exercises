@@ -1,48 +1,30 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route("/home")
-def index():
-	return render_template("index.html")
+@app.route("/calculator")
+def calc():
+		return render_template("calc.html")
 
-@app.route("/add/", methods = ["GET", "POST"])
-def add():
-	
-	if request.method == "POST":
-		num1 = int(request.form['add_num1'])
-		num2 = int(request.form['add_num2'])
-		add_result = num1 + num2
-		return render_template("add.html", add_result = add_result)
-	elif request.method == 'GET':
-		return render_template("add.html")
+@app.route("/math", methods =['POST'])
+def math():
+	num1 = int(request.form['num1'])
+	num2 = int(request.form['num2'])
+	if request.form['math']=='add': 
+		return "the sum is {}".format(num1 + num2)
+	elif request.form['math'] == 'subtract':
+		return "the difference is {}".format(num1 - num2)
+	elif request.form['math'] == 'multiply':
+		return "the product is {}".format(num1 * num2)
+	elif request.form['math'] == 'divide':
+		return "the quotient is {}".format(num1 / num2)			
 
-@app.route("/subtract/", methods =['GET', 'POST'])
-def subtract():
-	if request.method == "POST":
-		num1 = int(request.form['sub_num1'])
-		num2 = int(request.form['sub_num2'])
-		sub_result = num1 - num2
-		return render_template("subtract.html", sub_result = sub_result)
-	elif request.method == 'GET':
-		return render_template("subtract.html")
+@app.route("/person/<name>/<int:age>")
+def person(name, age):
+	name = name
+	age = age
+	response = "Hello, {}. You are {} years old.".format(name, age)	
+	return render_template("person.html", response = response)
 
-@app.route("/multiply", methods =['GET', 'POST'])
-def multiply():
-	if request.method == "POST":
-		num1 = int(request.form['mult_num1'])
-		num2 = int(request.form['mult_num2'])
-		mult_result = num1 * num2
-		return render_template("multiply.html", mult_result = mult_result)
-	elif request.method == 'GET':
-		return render_template("multiply.html")
-
-@app.route("/divide/", methods =['GET', 'POST'])
-def divide(divide_num1, divide_num2):
-	if request.method == "POST":
-		num1 = int(request.form['divide_num1'])
-		num2 = int(request.form['divide_num2'])
-		divide_result = num1 / num2
-		return render_template("divide.html", divide_result = divide_result)
-	elif request.method == 'GET':
-		return render_template("divide.html")
+if __name__=="__main__":
+	app.run(debug=True)

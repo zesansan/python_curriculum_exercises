@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>mathematical</h1>
+<form action="/math" method = "POST">
+	<input type="numbers" name="num1">
+	<input type="numbers" name= "num2">
+	<input type="submit" name = "math" value="add">
+	<input type="submit" name = "math" value="subtract">
+	<input type="submit" name = "math" value="multiply">
+	<input type="submit" name = "math" value="divide">
+</form>
+<h2>enter two numbers</h2>
+{% endblock %}

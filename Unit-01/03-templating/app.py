@@ -12,16 +12,16 @@ def math():
 	num1 = int(request.args.get('num1'))
 	num2 = int(request.args.get('num2'))
 
-	if request.args.get('math') == "add": 
+	if request.args.get('calculation') == "add": 
 		result = "the sum is {}".format(num1 + num2)
 
-	elif request.args.get('math') == "subtract":
+	elif request.args.get('calculation') == "subtract":
 		 result= "the difference is {}".format(num1 - num2)
 	
-	elif request.args.get('math') == "multiply":
+	elif request.args.get('calculation') == "multiply":
 		result= "the product is {}".format(num1 * num2)
 
-	elif request.args.get('math')== "divide":
+	elif request.args.get('calculation')== "divide":
 		result = "the quotient is {}".format(num1 / num2)
 	return render_template("math.html", result=result)					
 

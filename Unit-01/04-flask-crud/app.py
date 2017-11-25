@@ -4,6 +4,8 @@ from flask_modus import Modus
 
 snack_list=[
 ]
+snack_list.append(Snack('snickers', 'chocolate'))
+snack_list.append(Snack('skittles', 'candy'))
 
 app = Flask(__name__)
 modus = Modus(app)

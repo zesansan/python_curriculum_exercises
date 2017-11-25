@@ -34,13 +34,15 @@ def show(id):
 	found_snack = find_snack(id)[0]
 
 	if request.method == b'PATCH':
-		found_snack.name = request.form.get('snack_name')
+		found_snack.name = request.form.get('name')
+		found_snack.kind = request.form.get('kind')
 
 	if request.method == b'DELETE': 
 		snack_list.remove(found_snack)
 
 	if found_snack and request.method == 'GET':	
 		return render_template('show.html', snack=found_snack)
+
 	return redirect(url_for('index'))	
 
 @app.route('/snacks/<int:id>/edit')
@@ -49,7 +51,6 @@ def edit(id):
 	found_snack = find_snack(id)[0]
 	return render_template('edit.html', snack=found_snack)
 			
-
 if __name__ == '__main__':
 	app.run(debug=True)	
 

@@ -38,7 +38,6 @@ def show(id):
 
 	if request.method == b'PATCH':
 		found_snack.name = request.form.get('snack_name')
-		return redirect(url_for('index'))
 
 	if request.method == b'DELETE': 
 		snacks.remove(found_snack)

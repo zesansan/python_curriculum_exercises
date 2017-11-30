@@ -49,7 +49,7 @@ def index():
 		db.session.add(new_user)
 		db.session.commit()
 		return redirect(url_for('index'))	
-	return render_template('users/index.html')
+	return render_template('users/index.html', users=User.query.all())
 
 @app.route('/users/new')
 def new():
@@ -62,27 +62,47 @@ def show(id):
 		found_user.username = request.form['username']
 		found_user.first_name = request.form['first_name']
 		found_user.last_name = request.form['last_name']
-	return render_template('users/show.html')
+		return redirect(url_for('index'))
+	if request.method ==b'DELETE':
+		db.session.delete(found_user)
+		db.session.commit()
+		return redirect(url_for('index'))
+	return render_template('users/show.html', user=found_user)
 
 @app.route('/users/<int:id>/edit')
 def edit(id):
-	return render_template('users/edit.html')
+	return render_template('users/edit.html', user=User.query.get(id))
 
-@app.route('/users/<int:user_id>/messages')
-def messages_index():
-		pass
-
+@app.route('/users/<int:user_id>/messages', methods = ['GET', 'POST'])
+def messages_index(user_id):
+	if request.method == "POST":
+		new_message = Message(request.form['text'])
+		db.session.add(new_message)
+		db.session.commit()
+		return redirect(url_for('messages_index', user_id = user_id))
+	return render_template('messages/index.html')
+		
 @app.route('/users/<int:user_id>/messages/new')
 def messages_new(user_id):
-	return render_template('messages/new.html')
+	found_user = User.query.get(user_id)
+	return render_template('messages/new.html', user= found_user)
 
 @app.route('/users/<int:user_id>/messages/<int:id>')
 def messages_show(user_id, id):
-	pass
+	found_message = Message.query.get(id)
+	if request.method == b'PATCH':
+		found_message.text = request.form['text']
+		return redirect(url_for('messages_index', user_id = user_id))
+	if request.method == b'DELETE':
+		db.session.delete(found_message)
+		db.session.commit()
+		return redirect(url_for('messages_index', user_id=user_id))
+	return render_template('messages/show.html', message = found_message)	
 
 @app.route('/users/<int:user_id>/messages/<int:id>/edit')
 def messages_edit(user_id, id):
-	pass
+	found_message = Message.query.get(id)
+	return render_template('messages/edit.html', message=found_message)
 
 if __name__ == '__main__':
 	app.run(debug=True)	

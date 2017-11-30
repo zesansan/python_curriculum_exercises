@@ -59,7 +59,7 @@ def new():
 def show(id):
 	found_user = User.query.get(id)
 	if request.method == b'PATCH':
-		found_user.username = request.form['user_name']
+		found_user.username = request.form['username']
 		found_user.first_name = request.form['first_name']
 		found_user.last_name = request.form['last_name']
 	return render_template('users/show.html')

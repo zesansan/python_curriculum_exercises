@@ -58,7 +58,21 @@ def show(id):
 def edit(id):
 	return render_template('users/edit.html')
 
-@app.route('/users/<int')				
+@app.route('/users/<int:user_id>/messages')
+def messages_index():
+		pass
+
+@app.route('/users/<int:user_id>/messages/new')
+def messages_new(user_id):
+	return render_template('messages/new.html')
+
+@app.route('/users/<int:user_id>/messages/<int:id>')
+def messages_show(user_id, id):
+	pass
+
+@app.route('/users/<int:user_id>/messages/<int:id>/edit')
+def messages_edit(user_id, id):
+	pass
 
 if __name__ == '__main__':
 	app.run(debug=True)	

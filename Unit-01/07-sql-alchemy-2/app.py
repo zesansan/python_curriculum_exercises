@@ -44,7 +44,7 @@ def root():
 
 @app.route('/users', methods=['POST', 'GET'])
 def index():
-	if request.method='POST':
+	if request.method=='POST':
 		new_user = User(request.form['username'],request.form['first_name'],request.form['last_name'])
 		db.session.add(new_user)
 		db.session.commit()
@@ -59,6 +59,7 @@ def new():
 def show(id):
 	found_user = User.query.get(id)
 	if request.method == b'PATCH':
+		found_user.username = request.form['user_name']
 		found_user.first_name = request.form['first_name']
 		found_user.last_name = request.form['last_name']
 	return render_template('users/show.html')

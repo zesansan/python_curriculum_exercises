@@ -40,18 +40,27 @@ class Message(db.Model):
 
 @app.route('/')
 def root():
-	return render_template('users/index.html')
+	return redirect(url_for('index'))
 
-@app.route('/users')
+@app.route('/users', methods=['POST', 'GET'])
 def index():
+	if request.method='POST':
+		new_user = User(request.form['username'],request.form['first_name'],request.form['last_name'])
+		db.session.add(new_user)
+		db.session.commit()
+		return redirect(url_for('index'))	
 	return render_template('users/index.html')
 
 @app.route('/users/new')
 def new():
 	return render_template('users/new.html')
 
-@app.route('/users/<int:id>')
+@app.route('/users/<int:id>', methods=['POST','GET','PATCH','DELETE'])
 def show(id):
+	found_user = User.query.get(id)
+	if request.method == b'PATCH':
+		found_user.first_name = request.form['first_name']
+		found_user.last_name = request.form['last_name']
 	return render_template('users/show.html')
 
 @app.route('/users/<int:id>/edit')

@@ -55,7 +55,7 @@ def index():
 def new():
 	return render_template('users/new.html')
 
-@app.route('/users/<int:id>', methods=['POST','GET','PATCH','DELETE'])
+@app.route('/users/<int:id>', methods=['GET','PATCH','DELETE'])
 def show(id):
 	found_user = User.query.get(id)
 	if request.method == b'PATCH':
@@ -76,22 +76,25 @@ def edit(id):
 @app.route('/users/<int:user_id>/messages', methods = ['GET', 'POST'])
 def messages_index(user_id):
 	if request.method == "POST":
-		new_message = Message(request.form['text'])
+		new_message = Message(request.form['text'], user_id)
 		db.session.add(new_message)
 		db.session.commit()
 		return redirect(url_for('messages_index', user_id = user_id))
-	return render_template('messages/index.html')
+	user = User.query.get(user_id)	
+	return render_template('messages/index.html', user=user)
 		
 @app.route('/users/<int:user_id>/messages/new')
 def messages_new(user_id):
 	found_user = User.query.get(user_id)
 	return render_template('messages/new.html', user= found_user)
 
-@app.route('/users/<int:user_id>/messages/<int:id>')
+@app.route('/users/<int:user_id>/messages/<int:id>', methods=['PATCH', 'GET', 'DELETE'])
 def messages_show(user_id, id):
 	found_message = Message.query.get(id)
 	if request.method == b'PATCH':
 		found_message.text = request.form['text']
+		db.session.add(found_message)
+		db.session.commit()
 		return redirect(url_for('messages_index', user_id = user_id))
 	if request.method == b'DELETE':
 		db.session.delete(found_message)

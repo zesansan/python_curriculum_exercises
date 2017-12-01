@@ -1,10 +1,13 @@
 from flask import Flask, request, url_for, redirect, render_template
 from flask_modus import Modus
 from flask_sqlalchemy import SQLAlchemy
+from forms import UserForm, MessageForm
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/users-messages-db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db = SQLAlchemy(app)
 modus = Modus(app)
 
@@ -45,24 +48,34 @@ def root():
 @app.route('/users', methods=['POST', 'GET'])
 def index():
 	if request.method=='POST':
-		new_user = User(request.form['username'],request.form['first_name'],request.form['last_name'])
-		db.session.add(new_user)
-		db.session.commit()
-		return redirect(url_for('index'))	
+		form = UserForm(request.form)
+		if form.validate():
+			new_user = User(request.form['username'],request.form['first_name'],request.form['last_name'])
+			db.session.add(new_user)
+			db.session.commit()
+			return redirect(url_for('index'))	
+		else:
+			return render_template('user/new.html', form=form)	
 	return render_template('users/index.html', users=User.query.all())
 
 @app.route('/users/new')
 def new():
-	return render_template('users/new.html')
+	user_form = UserForm()
+	return render_template('users/new.html', form=user_form)
 
 @app.route('/users/<int:id>', methods=['GET','PATCH','DELETE'])
 def show(id):
 	found_user = User.query.get(id)
 	if request.method == b'PATCH':
-		found_user.username = request.form['username']
-		found_user.first_name = request.form['first_name']
-		found_user.last_name = request.form['last_name']
-		return redirect(url_for('index'))
+		form = UserForm(request.form)
+		if form.validate():
+			found_user.username = form.username.data
+			found_user.first_name = form.first_name.data
+			found_user.last_name = form.last_name.data
+			db.session.add(found_user)
+			db.session.commit()
+			return redirect(url_for('index'))
+		return render_template('users/edit.html', user=found_user, form=form)	
 	if request.method ==b'DELETE':
 		db.session.delete(found_user)
 		db.session.commit()
@@ -71,7 +84,9 @@ def show(id):
 
 @app.route('/users/<int:id>/edit')
 def edit(id):
-	return render_template('users/edit.html', user=User.query.get(id))
+	user=User.query.get(id)
+	user_form = UserFor(obj=user) #use obj to prepopulate forms
+	return render_template('users/edit.html', user=user, form=user_form)
 
 @app.route('/users/<int:user_id>/messages', methods = ['GET', 'POST'])
 def messages_index(user_id):

@@ -8,3 +8,6 @@ class UserForm(FlaskForm):
 
 class MessageForm(FlaskForm):
 	text = StringField('Text', [validators.DataRequired()])
+
+class DeleteForm(FlaskForm):
+	pass	

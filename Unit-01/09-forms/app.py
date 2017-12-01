@@ -1,7 +1,7 @@
 from flask import Flask, request, url_for, redirect, render_template
 from flask_modus import Modus
 from flask_sqlalchemy import SQLAlchemy
-from forms import UserForm, MessageForm
+from forms import UserForm, MessageForm, DeleteForm
 import os
 
 app = Flask(__name__)
@@ -77,16 +77,19 @@ def show(id):
 			return redirect(url_for('index'))
 		return render_template('users/edit.html', user=found_user, form=form)	
 	if request.method ==b'DELETE':
-		db.session.delete(found_user)
-		db.session.commit()
+		delete_form = DeleteForm()
+		if delete_form.validate():
+			db.session.delete(found_user)
+			db.session.commit()
 		return redirect(url_for('index'))
 	return render_template('users/show.html', user=found_user)
 
 @app.route('/users/<int:id>/edit')
 def edit(id):
+	delete_form = DeleteForm()
 	user=User.query.get(id)
-	user_form = UserFor(obj=user) #use obj to prepopulate forms
-	return render_template('users/edit.html', user=user, form=user_form)
+	user_form = UserForm(obj=user) #use obj to prepopulate forms
+	return render_template('users/edit.html', user=user, form=user_form,delete_form=delete_form)
 
 @app.route('/users/<int:user_id>/messages', methods = ['GET', 'POST'])
 def messages_index(user_id):

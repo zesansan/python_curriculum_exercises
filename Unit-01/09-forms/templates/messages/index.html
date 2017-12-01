@@ -7,6 +7,7 @@
 	{{ message.text }}
 	<br><a href="{{ url_for('messages_edit', user_id = user.id, id=message.id) }}">edit message</a>
 	<br><form action="{{ url_for('messages_show', user_id = user.id, id=message.id) }}?_method=DELETE" method="POST">
+		{{ delete_form.hidden_tag() }}
 		<input type="submit" value ="delete message">
 	</form>
 </p>

@@ -1,15 +1,16 @@
 from flask import Flask, request, redirect, url_for
 from flask_modus import Modus
 from flask_sqlalchemy import SQLAlchemy
-from forms import UserForm, MessageForm, DeleteForm
 import os
 
 app = Flask(__name__)
+modus = Modus(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/flask-blueprint-db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db = SQLAlchemy(app)
-modus = Modus(app)
+
 
 from project.users.views import users_blueprint
 from project.messages.views import messages_blueprint

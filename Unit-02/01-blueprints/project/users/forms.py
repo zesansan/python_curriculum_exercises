@@ -6,8 +6,5 @@ class UserForm(FlaskForm):
 	first_name = StringField('First Name', [validators.DataRequired()])
 	last_name = StringField('Last Name', [validators.DataRequired()])
 
-class MessageForm(FlaskForm):
-	text = StringField('Message', [validators.DataRequired()])
-
 class DeleteForm(FlaskForm):
 	pass	

@@ -5,7 +5,7 @@
 	{% for user in users %}
 		<p>
 		<b>{{ user.username }}</b>
-		<br><a href="{{ url_for('messages.messages_index', user_id=user.id) }}"> read all messages by {{ user.username }}</a>
+		<br><a href="{{ url_for('messages.index', user_id=user.id) }}"> read all messages by {{ user.username }}</a>
 		<br><a href="{{ url_for('users.edit', id=user.id) }}">edit info</a>
 		</p>
 	{% endfor %}

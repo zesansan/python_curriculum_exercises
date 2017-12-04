@@ -2,21 +2,38 @@
 
 {% block content %}
 <h1> Welcome, please sign up.</h1>
-<form action="{{ url_for('index') }}" method="POST">
-	{{ form.hidden_tag() }}
-	{% for field in form if field.widget.input_type != 'hidden' %}
+<form action="{{ url_for('users.index') }}" method="POST">
+	{{ form.csrf_token }}
 	<p>
-		{{ field.label }}
-		{{ field }}	
-		<span>
-			{% if field.errors %}
-				{% for error in field.erros %}
-					{{ error }}
-				{% endfor %}
-			{% endif %}		
-		</span>
+	{{  form.username(placeholder='username') }}	
+	<span>
+		{% if form.username.errors %}
+			{% for error in form.username.errors %}
+			{{ error }}
+			{% endfor %}
+		{% endif %}	
+	</span>
 	</p>
-	{% endfor %}
+	<p>
+	{{  form.first_name(placeholder='first_name') }}	
+	<span>
+		{% if form.first_name.errors %}
+			{% for error in form.first_name.errors %}
+			{{ error }}
+			{% endfor %}
+		{% endif %}	
+	</span>
+	</p>
+	<p>
+	{{  form.last_name(placeholder='last_name') }}	
+	<span>
+		{% if form.last_name.errors %}
+			{% for error in form.last_name.errors %}
+			{{ error }}
+			{% endfor %}
+		{% endif %}	
+	</span>
+	</p>
 	<input type="submit" value="sign up">
 </form>
 {% endblock %}

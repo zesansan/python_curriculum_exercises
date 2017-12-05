@@ -37,7 +37,9 @@
 	<input type="submit" value="update user info">
 </form>
 <form action="{{ url_for('users.show', id=user.id) }}?_method=DELETE" method = "POST">
+	{{ delete_form.hidden_tag() }}
 	<input type="submit" value="DELETE USER">
+	}
 	
 </form>
 {% endblock %}

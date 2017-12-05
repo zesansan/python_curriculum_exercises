@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request, flash
 from project.users.models import User
-from project.users.forms import UserForm
+from project.users.forms import UserForm, DeleteForm
 from project import db
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates/users')
@@ -38,11 +38,13 @@ def show(id):
 			return redirect(url_for('users.index'))
 		return render_template('edit.html', user=found_user, form=form)	
 	if request.method ==b'DELETE':
-		db.session.delete(found_user)
-		db.session.commit()
-		flash('User deleted!')
+		form = DeleteForm(request.form)
+		if form.validate():
+			db.session.delete(found_user)
+			db.session.commit()
+			flash('User deleted!')
 		return redirect(url_for('users.index'))
-	return render_template('show.html', user=found_user)
+	return render_template('show.html', user=found_user, delete_form=form)
 
 @users_blueprint.route('/<int:id>/edit')
 def edit(id):

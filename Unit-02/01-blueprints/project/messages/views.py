@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, url_for, request, flash
 from project.messages.models import Message
 from project.users.models import User
-from project.messages.forms import MessageForm
+from project.messages.forms import MessageForm, DeleteForm
 from project import db
 
 messages_blueprint = Blueprint(
@@ -40,15 +40,18 @@ def show(user_id, id):
 			return redirect(url_for('messages.index', user_id = user_id))
 		return render_template('messages/edit.html', message=found_message,form=form)	
 	if request.method == b'DELETE':
-		db.session.delete(found_message)
-		db.session.commit()
-		flash('message deleted')
+		delete_form=DeleteForm(request.form)
+		if delete_form.validate():
+			db.session.delete(found_message)
+			db.session.commit()
+			flash('message deleted')
 		return redirect(url_for('messages.index', user_id=user_id))
-	return render_template('messages/show.html', message = found_message)	
+	return render_template('messages/show.html', message = found_message, delete_form=delete_form)	
 
 @messages_blueprint.route('/<int:id>/edit')
 def edit(user_id, id):
 	found_message = Message.query.get(id)
 	form=MessageForm(obj=found_message)
-	return render_template('messages/edit.html', message=found_message, form=form)
+	delete_form = DeleteForm()
+	return render_template('messages/edit.html', message=found_message, form=form, delete_form=delete_form)
 

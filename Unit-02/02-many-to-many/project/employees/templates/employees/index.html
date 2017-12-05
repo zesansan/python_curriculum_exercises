@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>here are all the employees</h3>
+{% for employee in employees %}
+	<p>{{ employee.name }}
+	<a href="{{ url_for('employees.show', id=employee.id) }}">more about {{ employee.name }}</a>
+	<a href="{{ url_for('employees.edit', id=employee.id) }}">edit information</a>
+	</p>
+{% endfor %}
+<a href="{{ url_for('employees.new') }}">add a new employee</a>
+{% endblock %}

@@ -1,6 +1,6 @@
 from project import db
 
-EmployeeDepartment = db.Table('emplyee_departments', 
+EmployeeDepartment = db.Table('employee_departments', 
 								db.Column('id',
 											db.Integer,
 											primary_key=True),

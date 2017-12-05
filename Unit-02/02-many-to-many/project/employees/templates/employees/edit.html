@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="{{url_for('employees.show', id= employee.id)}}?_method=PATCH">
+    {{ form.csrf_token }}
+  <p>
+    {{ form.name(value=employee.name) }}
+    <span>
+      {% if form.name.errors %}
+        {% for error in form.name.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <p>
+  <p>
+    {{ form.years_at_company(value=employee.years_at_company) }}
+    <span>
+      {% if form.years_at_company.errors %}
+        {% for error in form.years_at_company.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <p>
+   DEPARTMENT(S)
+   
+   	{{ form.departments }}
+   	
+  </p>
+
+  <button type="submit">Update Employee</button>
+</form>
+<form method='POST' action="{{ url_for('employees.show', id=employee.id) }}?_method=DELETE">
+	<input type='submit' value="DELETE Employee">
+</form>
+{% endblock %}

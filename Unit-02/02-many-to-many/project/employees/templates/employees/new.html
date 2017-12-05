@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="{{url_for('employees.index')}}">
+    {{ form.csrf_token }}
+  <p>
+    {{ form.name(placeholder="Name") }}
+    <span>
+      {% if form.name.errors %}
+        {% for error in form.name.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <p>
+  <p>
+    {{ form.years_at_company(placeholder="Years At Company") }}
+    <span>
+      {% if form.years_at_company.errors %}
+        {% for error in form.years_at_company.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  <p>
+   DEPARTMENT(S)
+   
+   	{{ form.departments }}
+  </p>
+
+  <button type="submit">Add Employee</button>
+</form>
+{% endblock %}

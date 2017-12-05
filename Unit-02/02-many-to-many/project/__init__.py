@@ -10,44 +10,13 @@ app.config['SECRET_KEY'] = 'MOVE ME TO AN ENV FILE!'
 db = SQLAlchemy(app)
 modus = Modus(app)
 
-from project import db
+from project.employees.views import employees_blueprint
+from project.departments.views import departments_blueprint
 
-EmployeeDepartment = db.Table('emplyee_departments', 
-								db.Column('id',
-											db.Integer,
-											primary_key=True),
-								db.Column('employee_id', 
-											db.Integer,
-											db.ForeignKey('employees.id', ondelete="cascade")),
-								db.Column('department_id',
-											db.Integer,
-											db.ForeignKey('departments.id', ondelete="cascade")))
-class Employee(db.Model):
-	__tablename__ ='employees'
+app.register_blueprint(employees_blueprint, url_prefix='/employees')
+app.register_blueprint(departments_blueprint, url_prefix='/departments')
 
-	id = db.Column(db.Integer,primary_key=True)
-	name = db.Column(db.Text)
-	years_at_company = db.Column(db.Integer)
-	departments = db.relationship("Department",
-									secondary=EmployeeDepartment,
-									backref=db.backref('employees'))
-
-	def __init__(self,name,years_at_company):
-		self.name = name
-		self.years_at_company = years_at_company
-
-	def __repr__(self):
-		return "{} has been at the company for {} years.".format(self.name,self.years_at_company)
-
-class Department(db.Model):
-	__tablename__ = 'departments'
-
-	id = db.Column(db.Integer,primary_key=True)
-	name = db.Column(db.Text)
-
-	def __init__(self,name):
-		self.name = name
-
-	def __repr__(self):
-		return "{} is the deparment.".format(self.name)	
+@app.route('/')
+def root():
+	return redirect(url_for('employees.index'))
 

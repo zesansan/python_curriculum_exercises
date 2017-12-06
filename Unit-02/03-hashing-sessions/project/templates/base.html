@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class='container'>
-	<a href="{{ url_for('users.login') }}">home</a>
+	<a href="{{ url_for('users.welcome') }}">home</a>
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
 			{% for message in messages %}

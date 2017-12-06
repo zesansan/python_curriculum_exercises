@@ -34,12 +34,16 @@
 		{% endif %}	
 	</span>
 	</p>
+	<p>
+	{{  form.password(placeholder='password') }}	
+	<span>
+		{% if form.password.errors %}
+			{% for error in form.password.errors %}
+			{{ error }}
+			{% endfor %}
+		{% endif %}	
+	</span>
+	</p>
 	<input type="submit" value="update user info">
-</form>
-<form action="{{ url_for('users.show', id=user.id) }}?_method=DELETE" method = "POST">
-	{{ delete_form.hidden_tag() }}
-	<input type="submit" value="DELETE USER">
-	}
-	
 </form>
 {% endblock %}

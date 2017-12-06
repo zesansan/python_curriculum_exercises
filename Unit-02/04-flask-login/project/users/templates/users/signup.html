@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<h3>hi new fren, please sign up. </h3>
 <form method="POST" action="{{url_for('users.signup')}}">
   {{ form.csrf_token }}
   <p>{{ form.username(placeholder="username") }}

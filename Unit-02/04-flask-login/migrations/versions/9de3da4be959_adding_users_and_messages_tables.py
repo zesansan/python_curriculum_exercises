@@ -1,8 +1,8 @@
-"""creating users and messages tables
+"""adding users and messages tables
 
-Revision ID: 6a231b2d9f8e
+Revision ID: 9de3da4be959
 Revises: 
-Create Date: 2017-12-05 14:59:13.127959
+Create Date: 2017-12-06 11:21:46.433212
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6a231b2d9f8e'
+revision = '9de3da4be959'
 down_revision = None
 branch_labels = None
 depends_on = None

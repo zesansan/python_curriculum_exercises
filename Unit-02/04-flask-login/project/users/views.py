@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request
 from project.users.models import User
-from project.users.forms import UserForm, DeleteForm
+from project.users.forms import UserForm, DeleteForm, LoginForm
 from project import db
 
 from sqlalchemy.exc import IntegrityError
@@ -24,7 +24,7 @@ def signup():
 
 @users_blueprint.route('/login', methods = ["GET", "POST"])
 def login():
-    form = UserForm(request.form)
+    form = LoginForm(request.form)
     if request.method == "POST" and form.validate():
         if User.authenticate(form.data['username'], form.data['password']):
             return redirect(url_for('users.welcome'))

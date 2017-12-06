@@ -75,9 +75,10 @@ def logout():
 @users_blueprint.route('/<int:id>', methods=['GET','PATCH','DELETE'])
 def show(id):
     found_user = User.query.get(id)
+    delete_form = DeleteForm()
     if request.method == b'PATCH':
-    	form = UserForm(request.form)
-    	if form.validate():
+        form = UserForm(request.form)
+        if form.validate():
             found_user.username = form.username.data
             found_user.password = bcrypt.generate_password_hash(form.password.data).decode('UTF-8')
             found_user.first_name = form.first_name.data
@@ -86,22 +87,24 @@ def show(id):
             db.session.commit()
             flash('User updated!')
             return redirect(url_for('users.welcome'))
-            return render_template('users/edit.html', user=found_user, form=form)	
+        return render_template('users/edit.html', user=found_user, form=form)	
     if request.method ==b'DELETE':
-        form = DeleteForm(request.form)
-        if form.validate():
-        	db.session.delete(found_user)
-        	db.session.commit()
-        	flash('User deleted!')
-        return redirect(url_for('users.welcome'))
-        return render_template('users/show.html', user=found_user, delete_form=form)
+        delete_form = DeleteForm(request.form) 
+        if delete_form.validate():
+            db.session.delete(found_user)
+            db.session.commit()
+            session.pop('user_id', None)
+            flash('User deleted!')
+            return redirect(url_for('users.welcome')) 
+    return render_template('users/show.html', user=found_user, delete_form=delete_form)
 
 @users_blueprint.route('/<int:id>/edit')
 @ensure_logged_in
 @ensure_correct_user
 def edit(id):
-	user=User.query.get(id)
-	user_form = UserForm(obj=user) #use obj to prepopulate forms
-	return render_template('users/edit.html', user=user, form=user_form)	
+    user = User.query.get(id)
+    delete_form = DeleteForm()
+    user_form = UserForm(obj=user) #use obj to prepopulate forms
+    return render_template('users/edit.html', user=user, form=user_form, delete_form=delete_form)	
 
 

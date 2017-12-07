@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <h4> all about {{ department.name }}</h4>
+{% for employee in department.employees %}
+<li>{{ employee.name }}</li>
+{% endfor %}
+<a href="{{url_for('departments.edit', id= department.id)}}">edit department</a>
 {% endblock %}

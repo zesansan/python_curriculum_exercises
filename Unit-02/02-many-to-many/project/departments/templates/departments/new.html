@@ -1,3 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
+<form method="POST" action="{{url_for('departments.index')}}">
+    {{ form.csrf_token }}
+  <p>
+    {{ form.name(placeholder="Department Name") }}
+    <span>
+      {% if form.name.errors %}
+        {% for error in form.name.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+	<h4>Departments</h4>	
+	{% for department in departments %}
+	<li>{{ department.name }}</li>
+	{% endfor %}	
+  <button type="submit">Add Department</button>
+</form>
 {% endblock %}

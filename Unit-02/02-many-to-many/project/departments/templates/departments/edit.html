@@ -1,3 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
+<form method="POST" action="{{url_for('departments.show', id= department.id)}}?_method=PATCH">
+    {{ form.csrf_token }}
+  <p>
+    {{ form.name(value=department.name) }}
+    <span>
+      {% if form.name.errors %}
+        {% for error in form.name.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+
+  <button type="submit">Update Departments</button>
+</form>
+<form method='POST' action="{{ url_for('departments.show', id=department.id) }}?_method=DELETE">
+   {{ delete_form.csrf_token }}
+	<input type='submit' value="DELETE Department">
+</form>
 {% endblock %}

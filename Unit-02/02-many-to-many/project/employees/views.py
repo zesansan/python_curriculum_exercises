@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, Blueprint
 from project.models import Employee, Department
-from project.forms import NewEmployeeForm
+from project.forms import NewEmployeeForm, DeleteForm
 from project import db
 
 employees_blueprint = Blueprint(
@@ -32,26 +32,30 @@ def new():
 
 @employees_blueprint.route('/<int:id>', methods=['PATCH','DELETE','GET'])
 def show(id):
-
 	found_employee = Employee.query.get(id)
 	form = NewEmployeeForm(request.form)
-	
+	delete_form = DeleteForm()
+	form.set_choices()
 	if request.method == b'PATCH':
-		found_employee.name = request.form['name']	
-		found_employee.years_at_company = request.form['years_at_company']
-		db.session.add(found_employee)	
-		db.session.commit()
-		return redirect(url_for('employees.show', id=id))
-
+		if form.validate():
+			found_employee.name = request.form['name']	
+			found_employee.years_at_company = request.form['years_at_company']
+			found_employee.departments = []
+			for department in form.departments.data:
+				found_employee.departments.append(Department.query.get(department))
+			db.session.add(found_employee)	
+			db.session.commit()
+			return redirect(url_for('employees.show', id=id))
 	if request.method == b'DELETE':
 		db.session.delete(found_employee)
 		db.session.commit()
 		return redirect(url_for('employees.index'))
-	return render_template('employees/show.html', employee=found_employee, form=form)
+	return render_template('employees/show.html', employee=found_employee, form=form, delete_form=delete_form)
 
 @employees_blueprint.route('/<int:id>/edit')
 def edit(id):
 	found_employee = Employee.query.get(id)
 	form = NewEmployeeForm(request.form)
+	delete_form = DeleteForm()
 	form.set_choices()
-	return render_template('employees/edit.html', employee = found_employee, form=form)
+	return render_template('employees/edit.html', employee = found_employee, form=form, delete_form=delete_form)

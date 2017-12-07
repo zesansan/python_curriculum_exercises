@@ -31,7 +31,7 @@ class Department(db.Model):
 	__tablename__ = 'departments'
 
 	id = db.Column(db.Integer,primary_key=True)
-	name = db.Column(db.Text)
+	name = db.Column(db.Text, unique=True)
 
 	def __init__(self,name):
 		self.name = name

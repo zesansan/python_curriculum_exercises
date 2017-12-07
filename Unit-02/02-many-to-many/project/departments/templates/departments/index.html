@@ -1,3 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+<a href="{{url_for('departments.new')}}">add a new department</a>
+{% for department in departments %}
+	<li><a href="{{url_for('departments.show', id = department.id) }}"> {{ department.name }}</a></li>
+{% endfor %}	
 {% endblock %}

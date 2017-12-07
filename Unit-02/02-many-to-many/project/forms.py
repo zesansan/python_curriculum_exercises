@@ -17,3 +17,8 @@ class NewEmployeeForm(FlaskForm):
     def set_choices(self):
         self.departments.choices = [(d.id, d.name) for d in Department.query.all()]
 
+class DeleteForm(FlaskForm):
+    pass
+
+class NewDepartmentForm(FlaskForm):
+    name = TextField('Department Name', validators=[DataRequired()])    

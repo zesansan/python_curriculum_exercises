@@ -1,31 +1,13 @@
-from flask import Blueprint, redirect, render_template, url_for, request, session, flash, g 
+from flask import Blueprint, redirect, render_template, url_for, request, flash, g, session 
 from project.users.models import User
 from project.messages.models import Message
 from project.users.forms import UserForm, DeleteForm, LoginForm
-from functools import wraps
+from project.decorators import ensure_correct_user, ensure_logged_in
 from project import db, bcrypt
 
 from sqlalchemy.exc import IntegrityError
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-def ensure_logged_in(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        if not session.get('user_id'):
-            flash("Please log in first, fren.")
-            return redirect(url_for('users.login'))
-        return fn(*args, **kwargs)
-    return wrapper 
-
-def ensure_correct_user(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        if kwargs.get('id') != session.get('user_id'):
-            flash("Not Authorized, fren.")
-            return redirect(url_for('users.welcome'))
-        return fn(*args, **kwargs)
-    return wrapper       
-@users_blueprint.route('/')    
 
 @users_blueprint.route('/signup', methods =["GET", "POST"])
 def signup():

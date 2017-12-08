@@ -2,14 +2,15 @@ from flask import Blueprint, redirect, render_template, url_for, request, flash
 from project.messages.models import Message
 from project.users.models import User
 from project.messages.forms import MessageForm, DeleteForm
-from project.decorators import ensure_correct_user, ensure_logged_in
+from project.decorators import ensure_correct_user
+from flask_login import login_required
 from project import db
 
 messages_blueprint = Blueprint(
 	'messages', __name__, template_folder = 'templates')
 
 @messages_blueprint.route('/', methods = ['GET', 'POST'])
-@ensure_logged_in
+@login_required
 def index(user_id):
 	user = User.query.get(user_id)
 	if request.method == "POST":
@@ -24,7 +25,7 @@ def index(user_id):
 	return render_template('messages/index.html', user=user)
 		
 @messages_blueprint.route('/new')
-@ensure_logged_in
+@login_required
 @ensure_correct_user
 def new(user_id):
 	found_user = User.query.get(user_id)
@@ -53,7 +54,7 @@ def show(user_id, id):
 	return render_template('messages/show.html', message = found_message, delete_form=delete_form)	
 
 @messages_blueprint.route('/<int:id>/edit')
-@ensure_logged_in
+@login_required
 @ensure_correct_user
 def edit(user_id, id):
 	found_message = Message.query.get(id)

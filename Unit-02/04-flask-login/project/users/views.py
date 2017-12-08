@@ -33,9 +33,9 @@ def signup():
 def login():
     form = LoginForm(request.form)
     if request.method == "POST" and form.validate():
-        user = User.authenticate(form.data['username'], form.data['password'])
-        if user:
-            login_user(user)
+        auth_user = User.authenticate(form.data['username'], form.data['password'])
+        if auth_user:
+            login_user(auth_user)
             flash("You've successfully logged in!")
             return redirect(url_for('users.welcome'))
         flash("Invalid credentials. Please try again.")

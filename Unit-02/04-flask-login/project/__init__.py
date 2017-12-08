@@ -25,12 +25,12 @@ app.register_blueprint(messages_blueprint, url_prefix='/users/<int:user_id>/mess
 
 login_manager.login_view = 'users.login'
 
-from project.models import User 
+from project.users.models import User 
 
 @login_manager.user_loader
 def load_user(id):
 	return User.query.get(int(id))
-	
+
 @app.route('/')
 def root():
 	return redirect(url_for('users.login'))

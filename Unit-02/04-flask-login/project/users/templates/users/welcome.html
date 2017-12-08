@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome, {{ g.current_user.username }}. You are logged in, fren.</h1>
+<h1>Welcome, {{ current_user.username }}. You are logged in, fren.</h1>
 <h3>here are all the users</h3>
 	{% for user in users %}
 		<p>
@@ -9,5 +9,4 @@
 		<br><a href="{{ url_for('users.edit', id=user.id) }}">edit info</a>
 		</p>
 	{% endfor %}
-<a href="{{ url_for('users.logout') }}"> log out</a>
 {% endblock %}

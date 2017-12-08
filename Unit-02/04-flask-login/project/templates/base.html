@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class='container'>
-	<a href="{{ url_for('users.welcome') }}">home</a>
+	<a href="{{ url_for('users.welcome') }}">home</a> //
 	<a href="{{ url_for('users.messages') }}">see all messages</a>
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
@@ -24,6 +24,13 @@
 
 	{% block content %}
 	{% endblock %}
+	<p>
+		{% if current_user.is_authenticated %}
+		<a href="{{ url_for('users.logout') }}">logout</a>
+		{% else %}
+	<a href="{{ url_for('users.login') }}">login</a>
+	{% endif %}
+	</p>
 	</div>
 </body>
 </html>

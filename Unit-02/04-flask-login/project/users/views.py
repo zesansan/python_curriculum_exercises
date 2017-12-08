@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for, request, flash, g, session 
+from flask import Blueprint, redirect, render_template, url_for, request, flash
 from project.users.models import User
 from project.messages.models import Message
 from project.users.forms import UserForm, DeleteForm, LoginForm
@@ -23,7 +23,7 @@ def signup():
             db.session.commit()
             login_user(new_user)
             flash('User Created!')
-            return redirect(url_for('users.index'))
+            return redirect(url_for('users.login'))
         except IntegrityError:
             flash("Invalid submission. Please try again.")
             return render_template('users/signup.html', form=form)
@@ -40,13 +40,6 @@ def login():
             return redirect(url_for('users.welcome'))
         flash("Invalid credentials. Please try again.")
     return render_template('users/login.html', form=form)
-
-@users_blueprint.before_request
-def current_user():
-    if session.get('user_id'):
-        g.current_user= User.query.get(session['user_id'])
-    else:
-        g.current_user = None    
 
 @users_blueprint.route('/welcome')
 @login_required
